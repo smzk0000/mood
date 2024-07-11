@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>気分で選ぶ音楽</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+        .mood-buttons, .navigation-buttons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .mood-button, .nav-button {
+            font-size: 16px;
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #f0f0f0;
+            transition: background-color 0.3s;
+        }
+        .mood-button:hover, .nav-button:hover {
+            background-color: #e0e0e0;
+        }
+        #result {
+            margin: 20px auto;
+        }
+        #song-index {
+            margin-top: 10px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>気分で選ぶ音楽</h1>
+    <div id="mood-buttons" class="mood-buttons"></div>
+    <div id="result"></div>
+    <div class="navigation-buttons">
+        <button id="prev-button" class="nav-button">前の曲</button>
+        <button id="next-button" class="nav-button">次の曲</button>
+    </div>
+    <div id="song-index"></div>
+
+    <script src="moods.js"></script>
+    <script src="songs.js"></script>
+    <script>
+        const moodButtonsContainer = document.getElementById('mood-buttons');
+        const result = document.getElementById('result');
+        const songIndexSpan = document.getElementById('song-index');
+        const prevButton = document.getElementById('prev-button');
+        const nextButton = document.getElementById('next-button');
+
+        let currentMood = null;
+        let currentSongIndex = 0;
+
+        // 気分ボタンの生成
+        moods.forEach(mood => {
+            const button = document.createElement('button');
+            button.className = 'mood-button';
+            button.textContent = mood.name;
+            button.dataset.mood = mood.id;
+            moodButtonsContainer.appendChild(button);
+        });
+
+        function updateSong() {
+            if (currentMood) {
+                const moodSongs = songs[currentMood];
+                const spotifyUri = moodSongs[currentSongIndex];
+                result.innerHTML = `
+                    <iframe src="https://open.spotify.com/embed/track/${spotifyUri.split(':')[2]}" 
+                    width="300" height="380" frameborder="0" allowtransparency="true" 
+                    allow="encrypted-media"></iframe>
+                `;
+                songIndexSpan.textContent = `${currentSongIndex + 1} / ${moodSongs.length}`;
+                
+                // ナビゲーションボタンの有効/無効を切り替え
+                prevButton.disabled = currentSongIndex === 0;
+                nextButton.disabled = currentSongIndex === moodSongs.length - 1;
+            }
+        }
+
+        // 気分ボタンのクリックイベント
+        moodButtonsContainer.addEventListener('click', function(event) {
+            if (event.target.classList.contains('mood-button')) {
+                currentMood = event.target.dataset.mood;
+                currentSongIndex = 0;
+                updateSong();
+            }
+        });
+
+        // 前の曲ボタンのクリックイベント
+        prevButton.addEventListener('click', function() {
+            if (currentMood && currentSongIndex > 0) {
+                currentSongIndex--;
+                updateSong();
+            }
+        });
+
+        // 次の曲ボタンのクリックイベント
+        nextButton.addEventListener('click', function() {
+            if (currentMood && currentSongIndex < songs[currentMood].length - 1) {
+                currentSongIndex++;
+                updateSong();
+            }
+        });
+    </script>
+</body>
+</html>
