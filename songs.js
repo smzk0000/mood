@@ -1,22 +1,17 @@
 const songs = {
-    happy: [
-        "spotify:track:4cOdK2wGLETKBW3PvgPWqT",
-        "spotify:track:0WgNp8pxUnZX7D0SrSPAZH",
-        "spotify:track:6DCZcSspjsKoFjzjrWoCdn"
-    ],
     sad: [
-        "spotify:track:0pqnGHJpmpxLKifKRmU6WP",
-        "spotify:track:7wdwIaXUuzlu1grzWMFRJm",
-        "spotify:track:3AJwUDP919kvQ9QcozQPxg"
+        "spotify:track:7n0Kkf7pt5hGrxLtFORF1g",
+        "spotify:track:2MNAUM641g5lKgac4pRUMK"
     ],
-    energetic: [
-        "spotify:track:6DCZcSspjsKoFjzjrWoCdn",
-        "spotify:track:3w3y8KPTfNeOKPiqUTakBh",
-        "spotify:track:4cOdK2wGLETKBW3PvgPWqT"
+    emo: [
+        "spotify:track:0zO10o0bGFtuENXJgsMKvM"
     ],
     relaxed: [
-        "spotify:track:3AJwUDP919kvQ9QcozQPxg",
-        "spotify:track:0E4Y1XIbs8GrAT1YqVy6dq",
-        "spotify:track:0pqnGHJpmpxLKifKRmU6WP"
+        "spotify:track:5kLB3w5JPLitJvRpeL14M3",
+        "spotify:track:3K7YmyaR13ujAhQV8Wl2EM",
+        "spotify:track:6Q2p0sJECHZLlef84CRskE"
+    ],
+    angry: [
+        "spotify:track:7wHplrQXJbxahRZPlEw7VF"
     ]
 };
