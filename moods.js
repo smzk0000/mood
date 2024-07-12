@@ -1,6 +1,6 @@
 const moods = [
-    { id: "sad", name: "悲しい" },
-    { id: "emo", name: "感動" },
-    { id: "relaxed", name: "リラックス" },
-    { id: "angry", name: "怒り" }
+    { id: "sad", name: "悲しい", englishName: "sad" },
+    { id: "emo", name: "感動", englishName: "emotional" },
+    { id: "relaxed", name: "リラックス", englishName: "relaxed" },
+    { id: "angry", name: "怒り", englishName: "angry" }
 ];
