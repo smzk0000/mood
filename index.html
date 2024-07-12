@@ -3,22 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>気分で選ぶ音楽</title>
+    <title>Postrock Moods</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
             margin: 0;
             padding: 20px;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            transition: background-image 0.5s ease-in-out;
         }
-        .mood-buttons, .navigation-buttons {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 10px;
+        .mood-buttons-container {
+            width: 100%;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
             margin-bottom: 20px;
         }
-        .mood-button, .nav-button {
+        .mood-buttons {
+            display: inline-flex;
+            padding: 10px 0;
+        }
+        .mood-button {
+            font-size: 16px;
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #f0f0f0;
+            transition: background-color 0.3s;
+            margin-right: 10px;
+        }
+        .mood-button:hover {
+            background-color: #e0e0e0;
+        }
+        .navigation-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .nav-button {
             font-size: 16px;
             padding: 10px 20px;
             cursor: pointer;
@@ -27,7 +54,7 @@
             background-color: #f0f0f0;
             transition: background-color 0.3s;
         }
-        .mood-button:hover, .nav-button:hover {
+        .nav-button:hover {
             background-color: #e0e0e0;
         }
         #result {
@@ -40,8 +67,10 @@
     </style>
 </head>
 <body>
-    <h1>気分で選ぶ音楽</h1>
-    <div id="mood-buttons" class="mood-buttons"></div>
+    <h1>Postrock Moods</h1>
+    <div class="mood-buttons-container">
+        <div id="mood-buttons" class="mood-buttons"></div>
+    </div>
     <div id="result"></div>
     <div class="navigation-buttons">
         <button id="prev-button" class="nav-button">前の曲</button>
@@ -87,12 +116,26 @@
             }
         }
 
+        // 背景画像を更新する関数
+        function updateBackground(mood) {
+            const query = encodeURIComponent(mood);
+            const url = `https://source.unsplash.com/1600x900/?${query}`;
+            
+            // 新しい画像をプリロード
+            const img = new Image();
+            img.src = url;
+            img.onload = function() {
+                document.body.style.backgroundImage = `url('${url}')`;
+            }
+        }
+
         // 気分ボタンのクリックイベント
         moodButtonsContainer.addEventListener('click', function(event) {
             if (event.target.classList.contains('mood-button')) {
                 currentMood = event.target.dataset.mood;
                 currentSongIndex = 0;
                 updateSong();
+                updateBackground(moods.find(m => m.id === currentMood).englishName); // 英語の気分名を使用
             }
         });
 
