@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Postrock Moods</title>
+    <title>Mood Postrock</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -27,14 +27,14 @@
             padding: 10px 0;
         }
         .mood-button {
-            font-size: 14px; /* ここを16pxから14pxに変更 */
-            padding: 8px 16px; /* パディングも少し調整 */
+            font-size: 14px;
+            padding: 8px 16px;
             cursor: pointer;
             border: none;
             border-radius: 5px;
             background-color: #f0f0f0;
             transition: background-color 0.3s;
-            margin-right: 8px; /* マージンも少し調整 */
+            margin-right: 8px;
         }
         .mood-button:hover {
             background-color: #e0e0e0;
@@ -46,7 +46,7 @@
             margin-top: 20px;
         }
         .nav-button {
-            font-size: 14px; /* ナビゲーションボタンのフォントサイズも変更 */
+            font-size: 14px;
             padding: 8px 16px;
             cursor: pointer;
             border: none;
@@ -66,8 +66,8 @@
         }
     </style>
 </head>
-<body id="background">
-    <h1>Postrock Moods</h1>
+<body>
+    <h1>Mood Postrock</h1>
     <div class="mood-buttons-container">
         <div id="mood-buttons" class="mood-buttons"></div>
     </div>
@@ -91,14 +91,14 @@
         let currentSongIndex = 0;
         let shuffledSongs = [];
 
-// Fisher-Yates シャッフルアルゴリズム
-function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-}
+        // Fisher-Yates シャッフルアルゴリズム
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
 
         // 気分ボタンの生成
         moods.forEach(mood => {
@@ -108,7 +108,6 @@ function shuffleArray(array) {
             button.dataset.mood = mood.id;
             moodButtonsContainer.appendChild(button);
         });
-
 
         function updateSong() {
             if (currentMood) {
@@ -127,33 +126,20 @@ function shuffleArray(array) {
         }
 
         // 背景画像を更新する関数
-        function updateBackground(mood) {
-            const query = encodeURIComponent(mood);
-            const url = `https://source.unsplash.com/1600x900/?${query}&random=${new Date().getTime()}`;
-            
-            fetch(url)
-                .then(response => {
-                    if (response.ok) {
-                        return response.url;
-                    }
-                    throw new Error('Network response was not ok.');
-                })
-                .then(imageUrl => {
-                    document.body.style.backgroundImage = `url('${imageUrl}')`;
-                })
-                .catch(error => {
-                    console.error('Error fetching background image:', error);
-                });
+        function updateBackground(moodId) {
+            const imageUrl = `/img/${moodId}.jpg`; // または .png など、適切な拡張子を使用
+            document.body.style.backgroundImage = `url('${imageUrl}')`;
+            console.log('Background image updated:', imageUrl);
         }
 
         // 気分ボタンのクリックイベント
         moodButtonsContainer.addEventListener('click', function(event) {
             if (event.target.classList.contains('mood-button')) {
                 currentMood = event.target.dataset.mood;
-                shuffledSongs = shuffleArray([...songs[currentMood]]); // 曲をシャッフル
+                shuffledSongs = shuffleArray([...songs[currentMood]]);
                 currentSongIndex = 0;
                 updateSong();
-                updateBackground(moods.find(m => m.id === currentMood).englishName);
+                updateBackground(currentMood); // moodId を直接渡す
             }
         });
 
@@ -167,7 +153,7 @@ function shuffleArray(array) {
 
         // 次の曲ボタンのクリックイベント
         nextButton.addEventListener('click', function() {
-            if (currentMood && currentSongIndex < songs[currentMood].length - 1) {
+            if (currentMood && currentSongIndex < shuffledSongs.length - 1) {
                 currentSongIndex++;
                 updateSong();
             }
