@@ -3,11 +3,13 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main  # デフォルトブランチ名に合わせて変更してください
+      - main  # あなたのデフォルトブランチ名に合わせて変更してください
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
     - uses: actions/checkout@v2
     
