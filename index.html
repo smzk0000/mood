@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Postrock Moods</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            transition: background-image 0.5s ease-in-out;
+        }
+        .mood-buttons-container {
+            width: 100%;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+            margin-bottom: 20px;
+        }
+        .mood-buttons {
+            display: inline-flex;
+            padding: 10px 0;
+        }
+        .mood-button {
+            font-size: 14px; /* ここを16pxから14pxに変更 */
+            padding: 8px 16px; /* パディングも少し調整 */
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #f0f0f0;
+            transition: background-color 0.3s;
+            margin-right: 8px; /* マージンも少し調整 */
+        }
+        .mood-button:hover {
+            background-color: #e0e0e0;
+        }
+        .navigation-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .nav-button {
+            font-size: 14px; /* ナビゲーションボタンのフォントサイズも変更 */
+            padding: 8px 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #f0f0f0;
+            transition: background-color 0.3s;
+        }
+        .nav-button:hover {
+            background-color: #e0e0e0;
+        }
+        #result {
+            margin: 20px auto;
+        }
+        #song-index {
+            margin-top: 10px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body id="background">
+    <h1>Postrock Moods</h1>
+    <div class="mood-buttons-container">
+        <div id="mood-buttons" class="mood-buttons"></div>
+    </div>
+    <div id="result"></div>
+    <div class="navigation-buttons">
+        <button id="prev-button" class="nav-button">前の曲</button>
+        <button id="next-button" class="nav-button">次の曲</button>
+    </div>
+    <div id="song-index"></div>
+
+    <script src="moods.js"></script>
+    <script src="songs.js"></script>
+    <script>
+        const moodButtonsContainer = document.getElementById('mood-buttons');
+        const result = document.getElementById('result');
+        const songIndexSpan = document.getElementById('song-index');
+        const prevButton = document.getElementById('prev-button');
+        const nextButton = document.getElementById('next-button');
+
+        let currentMood = null;
+        let currentSongIndex = 0;
+        let shuffledSongs = [];
+
+// Fisher-Yates シャッフルアルゴリズム
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
+        // 気分ボタンの生成
+        moods.forEach(mood => {
+            const button = document.createElement('button');
+            button.className = 'mood-button';
+            button.textContent = mood.name;
+            button.dataset.mood = mood.id;
+            moodButtonsContainer.appendChild(button);
+        });
+
+
+        function updateSong() {
+            if (currentMood) {
+                const spotifyUri = shuffledSongs[currentSongIndex];
+                result.innerHTML = `
+                    <iframe src="https://open.spotify.com/embed/track/${spotifyUri.split(':')[2]}" 
+                    width="300" height="380" frameborder="0" allowtransparency="true" 
+                    allow="encrypted-media"></iframe>
+                `;
+                songIndexSpan.textContent = `${currentSongIndex + 1} / ${shuffledSongs.length}`;
+                
+                // ナビゲーションボタンの有効/無効を切り替え
+                prevButton.disabled = currentSongIndex === 0;
+                nextButton.disabled = currentSongIndex === shuffledSongs.length - 1;
+            }
+        }
+
+        // 背景画像を更新する関数
+        function updateBackground(mood) {
+            const query = encodeURIComponent(mood);
+            const url = `https://source.unsplash.com/1600x900/?${query}&random=${new Date().getTime()}`;
+            
+            fetch(url)
+                .then(response => {
+                    if (response.ok) {
+                        return response.url;
+                    }
+                    throw new Error('Network response was not ok.');
+                })
+                .then(imageUrl => {
+                    document.body.style.backgroundImage = `url('${imageUrl}')`;
+                })
+                .catch(error => {
+                    console.error('Error fetching background image:', error);
+                });
+        }
+
+        // 気分ボタンのクリックイベント
+        moodButtonsContainer.addEventListener('click', function(event) {
+            if (event.target.classList.contains('mood-button')) {
+                currentMood = event.target.dataset.mood;
+                shuffledSongs = shuffleArray([...songs[currentMood]]); // 曲をシャッフル
+                currentSongIndex = 0;
+                updateSong();
+                updateBackground(moods.find(m => m.id === currentMood).englishName);
+            }
+        });
+
+        // 前の曲ボタンのクリックイベント
+        prevButton.addEventListener('click', function() {
+            if (currentMood && currentSongIndex > 0) {
+                currentSongIndex--;
+                updateSong();
+            }
+        });
+
+        // 次の曲ボタンのクリックイベント
+        nextButton.addEventListener('click', function() {
+            if (currentMood && currentSongIndex < songs[currentMood].length - 1) {
+                currentSongIndex++;
+                updateSong();
+            }
+        });
+    </script>
+</body>
+</html>
