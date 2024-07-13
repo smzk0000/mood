@@ -17,7 +17,17 @@
             background-attachment: fixed;
             transition: background-image 0.5s ease-in-out;
         }
-
+        .mood-buttons-container {
+            width: 100%;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+            margin-bottom: 20px;
+        }
+        .mood-buttons {
+            display: inline-flex;
+            padding: 10px 0;
+        }
         .mood-button {
             font-size: 14px;
             padding: 8px 16px;
@@ -29,11 +39,15 @@
             transition: background-color 0.3s;
             margin-right: 8px;
         }
-
         .mood-button:hover {
             background-color: rgba(224, 224, 224, 0.4);
         }
-
+        .navigation-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
         .nav-button {
             font-size: 14px;
             padding: 8px 16px;
@@ -44,11 +58,9 @@
             color: white;
             transition: background-color 0.3s;
         }
-
         .nav-button:hover {
             background-color: rgba(224, 224, 224, 0.4);
         }
-
         #result {
             margin: 20px auto;
         }
@@ -117,10 +129,9 @@
             }
         }
 
-        // 背景画像を更新する関数
         function updateBackground(moodId) {
-            const baseUrl = '/mood'; // リポジトリ名に置き換えてください
-            const imageUrl = `/img/${moodId}.jpg`;
+            const baseUrl = '/mood'; // リポジトリ名に合わせて設定
+            const imageUrl = `${baseUrl}/img/${moodId}.jpg`;
             console.log('Attempting to load image:', imageUrl);
             
             const img = new Image();
@@ -141,7 +152,7 @@
                 shuffledSongs = shuffleArray([...songs[currentMood]]);
                 currentSongIndex = 0;
                 updateSong();
-                updateBackground(currentMood); // moodId を直接渡す
+                updateBackground(currentMood);
             }
         });
 
