@@ -10,53 +10,45 @@
             text-align: center;
             margin: 0;
             padding: 20px;
+            background-color: black;
+            color: white;
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
             transition: background-image 0.5s ease-in-out;
         }
-        .mood-buttons-container {
-            width: 100%;
-            overflow-x: auto;
-            white-space: nowrap;
-            -webkit-overflow-scrolling: touch;
-            margin-bottom: 20px;
-        }
-        .mood-buttons {
-            display: inline-flex;
-            padding: 10px 0;
-        }
+
         .mood-button {
             font-size: 14px;
             padding: 8px 16px;
             cursor: pointer;
             border: none;
             border-radius: 5px;
-            background-color: #f0f0f0;
+            background-color: rgba(240, 240, 240, 0.2);
+            color: white;
             transition: background-color 0.3s;
             margin-right: 8px;
         }
+
         .mood-button:hover {
-            background-color: #e0e0e0;
+            background-color: rgba(224, 224, 224, 0.4);
         }
-        .navigation-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 20px;
-        }
+
         .nav-button {
             font-size: 14px;
             padding: 8px 16px;
             cursor: pointer;
             border: none;
             border-radius: 5px;
-            background-color: #f0f0f0;
+            background-color: rgba(240, 240, 240, 0.2);
+            color: white;
             transition: background-color 0.3s;
         }
+
         .nav-button:hover {
-            background-color: #e0e0e0;
+            background-color: rgba(224, 224, 224, 0.4);
         }
+
         #result {
             margin: 20px auto;
         }
@@ -128,9 +120,18 @@
         // 背景画像を更新する関数
         function updateBackground(moodId) {
             const baseUrl = '/mood'; // リポジトリ名に置き換えてください
-            const imageUrl = `${baseUrl}/img/${moodId}.jpg`;
-            document.body.style.backgroundImage = `url('${imageUrl}')`;
-            console.log('Background image updated:', imageUrl);
+            const imageUrl = `/img/${moodId}.jpg`;
+            console.log('Attempting to load image:', imageUrl);
+            
+            const img = new Image();
+            img.onload = function() {
+                console.log('Image loaded successfully');
+                document.body.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('${imageUrl}')`;
+            };
+            img.onerror = function() {
+                console.error('Failed to load image:', imageUrl);
+            };
+            img.src = imageUrl;
         }
 
         // 気分ボタンのクリックイベント
