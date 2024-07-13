@@ -127,7 +127,8 @@
 
         // 背景画像を更新する関数
         function updateBackground(moodId) {
-            const imageUrl = `/img/${moodId}.jpg`; // または .png など、適切な拡張子を使用
+            const baseUrl = '/mood'; // リポジトリ名に置き換えてください
+            const imageUrl = `${baseUrl}/img/${moodId}.jpg`;
             document.body.style.backgroundImage = `url('${imageUrl}')`;
             console.log('Background image updated:', imageUrl);
         }
