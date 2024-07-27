@@ -11,15 +11,20 @@ const songs = {
         "spotify:track:70zCEVxTugFHntItKozubI",
         "spotify:track:3ofrLJrQjMPuEBQddeAbZn",
         "spotify:track:1LlEw7wp9AOX0ZkgoOEMxd",
+        "spotify:track:4i3877NjqgIZlzyMcxh8TZ",
         "spotify:track:1fMQ3xZqPn5K87R7COXM23",
-        "spotify:track:6Xajr512QEGAZ20bqAWkyT"
+        "spotify:track:6Xajr512QEGAZ20bqAWkyT",
+        "spotify:track:65E6q1ktDLAZCoocU2eDnb"
     ],
     emotional: [
         "spotify:track:0zO10o0bGFtuENXJgsMKvM",
+        "spotify:track:7r14vA3YsfA2gHO5FyVYrP",
         "spotify:track:1HfJV18PHF2UQqh4TuySBJ",
         "spotify:track:0kOBkRmEgUC20do94Zqi9k",
         "spotify:track:568nXF19QXYPZnQ6XSkuSH",
-        "spotify:track:7h6GcTsaJpCWlvwW1PMUjA"
+        "spotify:track:7h6GcTsaJpCWlvwW1PMUjA",
+        "spotify:track:06fMBaxaNv9swvwTNeC075",
+        "spotify:track:1ipAB0J5JVEY0nrMH8TBGJ"
     ],
     relaxed: [
         "spotify:track:5kLB3w5JPLitJvRpeL14M3",
@@ -34,9 +39,6 @@ const songs = {
     intense: [
         "spotify:track:7wHplrQXJbxahRZPlEw7VF",
         "spotify:track:01HmPLtKDSloi6t10gW1El",
-        "spotify:track:255ET1WLnkSYN0uzEOuaRq",
-        "spotify:track:6dLkABcI4OB65ObwZT7Lao",
-        "spotify:track:0WCk7NesqMEkzMloCvChxB",
         "spotify:track:5xS2rxwtXD4vS2tTU9kzfQ",
         "spotify:track:05aYSYeteDE0bXJWb7sYjr",
         "spotify:track:5SbbA2y1phJ4ezeVihR4re",
@@ -44,10 +46,12 @@ const songs = {
         "spotify:track:1EqPpTJxzKSSWjx8nAQtmX",
         "spotify:track:2Y9pSmDn8UoqSkg88IDaW2",
         "spotify:track:0glEvaWrhIP0boU56o5Q9U",
-        "spotify:track:3cld8uMQZok9Z8TCw041zF"
-    ],
-    drone: [
-        "spotify:track:2hERMN4Fl5CdlEWiWrCLEX"
+        "spotify:track:3cld8uMQZok9Z8TCw041zF",
+        "spotify:track:1scLI3CLQztRJF0Xk5VEbl",
+        "spotify:track:0Ksm6vcrEfcFscGEhO5uzB",
+        "spotify:track:6OX4cEphkyhAbmaxb2u8IM",
+        "spotify:track:14VBgcXnvmNikJKOO5M5XZ",
+        "spotify:track:3B5KA9o8c7oPUsej5Ufkvl"
     ],
     cinematic: [
         "spotify:track:37HI0imp0t6a0MBS00lPkS",
@@ -68,26 +72,33 @@ const songs = {
         "spotify:track:0r2FW7dxoekEDiylEvcecO",
         "spotify:track:1scLI3CLQztRJF0Xk5VEbl",
         "spotify:track:3Qq05M2i4m89LVeQ8ZK2ek",
-        "spotify:track:4i3877NjqgIZlzyMcxh8TZ"
+        "spotify:track:5jMuXTa5hECm37P7C0mbIB",
+        "spotify:track:2g2dBiugZROCtl8ipW9NQo"
     ],
     meditation: [
+        "spotify:track:2hERMN4Fl5CdlEWiWrCLEX",
         "spotify:track:3cIG78oBauowzEbkBwWADN",
         "spotify:track:4CAqn3G9Nzq4GifRv7gW2D",
         "spotify:track:5HwSgmQZYM0laGsogMiMI7",
         "spotify:track:1ocxp1ncDQF8UxpYjVQ8cX",
         "spotify:track:4q3c1siZTggTRiT1PeRu2z",
+        "spotify:track:7yw2jKCffMUiYqB1wo3fbC",
         "spotify:track:3LHINSuy4dL5Lgvg0q8M2k"
     ],
     soundscape: [
+        "spotify:track:255ET1WLnkSYN0uzEOuaRq",
+        "spotify:track:6dLkABcI4OB65ObwZT7Lao",
+        "spotify:track:0WCk7NesqMEkzMloCvChxB",
         "spotify:track:0DgiShjYS9dR537WGITGrP",
         "spotify:track:282xkc8wWvstwbegsX9aCh",
         "spotify:track:213ABDaJfIte2YHACSDXrq",
         "spotify:track:3lG9eYlhnipGfvAR4ZkBk7",
         "spotify:track:2RP7q7qBxg35vgvfCwlstD",
-        "spotify:track:4xh0pq6fa768xtuheAoP0p"
-    ],
-    math: [
-        "spotify:track:7r14vA3YsfA2gHO5FyVYrP",
-        "spotify:track:2RJuCZXtZYubzTW78kmaBx"
+        "spotify:track:2RJuCZXtZYubzTW78kmaBx",
+        "spotify:track:4xh0pq6fa768xtuheAoP0p",
+        "spotify:track:3PelTO5O5oekD5i0A4dyKF",
+        "spotify:track:0S9w3jx4cO9rSBcGwB16in",
+        "spotify:track:7fodfUsFVgLDDQfW1WUob4",
+        "spotify:track:14GNWS687ThDibdfbfkDPf"
     ]
 };
