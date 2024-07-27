@@ -206,7 +206,7 @@
         function updateBackground(moodId) {
             const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
             const baseUrl = isLocal ? '' : '/mood';
-            const imageUrl = `${baseUrl}/img/${moodId}.jpg`;
+            const imageUrl = `${baseUrl}/mood/img/${moodId}.jpg`;
             console.log('Attempting to load image:', imageUrl);
             
             const img = new Image();
