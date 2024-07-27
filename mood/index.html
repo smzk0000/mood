@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,7 +15,21 @@
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
-            transition: background-image 0.5s ease-in-out;
+            transition: background-image 2s ease-in-out; /* 2秒に変更 */
+            transition: background-image 2s ease-in-out, opacity 1s ease-in-out;
+            position: relative;
+        }
+        #background-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            transition: opacity 2s ease-in-out;
+            z-index: -1;
         }
         .mood-buttons-container {
             width: 100%;
@@ -38,6 +52,7 @@
             color: white;
             transition: background-color 0.3s;
             margin-right: 8px;
+            text-transform: capitalize;
         }
         .mood-button:hover {
             background-color: rgba(224, 224, 224, 0.4);
@@ -68,17 +83,100 @@
             margin-top: 10px;
             font-size: 14px;
         }
+        #song-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0 auto;
+            max-width: 900px;
+        }
+        #song-list li {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .spotify-embed {
+            width: 100%;
+            height: 80px;
+            border: none;
+        }
+        .mode-switch {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 5px 10px;
+            border-radius: 15px;
+        }
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+            margin: 0 5px;
+        }
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 20px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+        .mode-label {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.7);
+            margin: 0 2px;
+        }
     </style>
 </head>
 <body>
+    <div id="background-overlay"></div>
     <h1>Mood Postrock</h1>
+    <div class="mode-switch">
+        <span class="mode-label">Shuffle</span>
+        <label class="switch">
+            <input type="checkbox" id="mode-toggle">
+            <span class="slider"></span>
+        </label>
+        <span class="mode-label">List</span>
+    </div>
     <div class="mood-buttons-container">
         <div id="mood-buttons" class="mood-buttons"></div>
     </div>
     <div id="result"></div>
+    <ul id="song-list" style="display: none;"></ul>
     <div class="navigation-buttons">
-        <button id="prev-button" class="nav-button">前の曲</button>
-        <button id="next-button" class="nav-button">次の曲</button>
+        <button id="prev-button" class="nav-button">Previous</button>
+        <button id="next-button" class="nav-button">Next</button>
     </div>
     <div id="song-index"></div>
 
@@ -90,12 +188,13 @@
         const songIndexSpan = document.getElementById('song-index');
         const prevButton = document.getElementById('prev-button');
         const nextButton = document.getElementById('next-button');
+        const modeToggle = document.getElementById('mode-toggle');
 
         let currentMood = null;
         let currentSongIndex = 0;
         let shuffledSongs = [];
+        let isShuffleMode = true;
 
-        // Fisher-Yates シャッフルアルゴリズム
         function shuffleArray(array) {
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -104,14 +203,36 @@
             return array;
         }
 
-        // 気分ボタンの生成
-        moods.forEach(mood => {
-            const button = document.createElement('button');
-            button.className = 'mood-button';
-            button.textContent = mood.name;
-            button.dataset.mood = mood.id;
-            moodButtonsContainer.appendChild(button);
-        });
+        function updateBackground(moodId) {
+            const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+            const baseUrl = isLocal ? '' : '/mood';
+            const imageUrl = `${baseUrl}/img/${moodId}.jpg`;
+            console.log('Attempting to load image:', imageUrl);
+            
+            const img = new Image();
+            img.onload = function() {
+                console.log('Image loaded successfully');
+                const overlay = document.getElementById('background-overlay');
+                const newOverlay = overlay.cloneNode();
+                
+                newOverlay.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('${imageUrl}')`;
+                newOverlay.style.opacity = '0';
+                
+                document.body.appendChild(newOverlay);
+                
+                setTimeout(() => {
+                    newOverlay.style.opacity = '1';
+                }, 50);
+                
+                setTimeout(() => {
+                    overlay.remove();
+                }, 2000);
+            };
+            img.onerror = function() {
+                console.error('Failed to load image:', imageUrl);
+            };
+            img.src = imageUrl;
+        }
 
         function updateSong() {
             if (currentMood) {
@@ -123,29 +244,42 @@
                 `;
                 songIndexSpan.textContent = `${currentSongIndex + 1} / ${shuffledSongs.length}`;
                 
-                // ナビゲーションボタンの有効/無効を切り替え
                 prevButton.disabled = currentSongIndex === 0;
                 nextButton.disabled = currentSongIndex === shuffledSongs.length - 1;
             }
         }
 
-        function updateBackground(moodId) {
-            const baseUrl = '/mood'; // リポジトリ名に合わせて設定
-            const imageUrl = `${baseUrl}/img/${moodId}.jpg`;
-            console.log('Attempting to load image:', imageUrl);
-            
-            const img = new Image();
-            img.onload = function() {
-                console.log('Image loaded successfully');
-                document.body.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('${imageUrl}')`;
-            };
-            img.onerror = function() {
-                console.error('Failed to load image:', imageUrl);
-            };
-            img.src = imageUrl;
+        function updateListView() {
+            const songList = document.getElementById('song-list');
+            songList.innerHTML = '';
+            shuffledSongs.forEach((spotifyUri, index) => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <iframe src="https://open.spotify.com/embed/track/${spotifyUri.split(':')[2]}" 
+                    class="spotify-embed" allowtransparency="true" allow="encrypted-media"></iframe>
+                `;
+                songList.appendChild(li);
+            });
         }
 
-        // 気分ボタンのクリックイベント
+        function switchMode(isShuffleMode) {
+            document.getElementById('result').style.display = isShuffleMode ? 'block' : 'none';
+            document.getElementById('song-list').style.display = isShuffleMode ? 'none' : 'block';
+            document.querySelector('.navigation-buttons').style.display = isShuffleMode ? 'flex' : 'none';
+            document.getElementById('song-index').style.display = isShuffleMode ? 'block' : 'none';
+            if (!isShuffleMode) {
+                updateListView();
+            }
+        }
+
+        moods.forEach(mood => {
+            const button = document.createElement('button');
+            button.className = 'mood-button';
+            button.textContent = mood.id;
+            button.dataset.mood = mood.id;
+            moodButtonsContainer.appendChild(button);
+        });
+
         moodButtonsContainer.addEventListener('click', function(event) {
             if (event.target.classList.contains('mood-button')) {
                 currentMood = event.target.dataset.mood;
@@ -153,10 +287,10 @@
                 currentSongIndex = 0;
                 updateSong();
                 updateBackground(currentMood);
+                switchMode(isShuffleMode);
             }
         });
 
-        // 前の曲ボタンのクリックイベント
         prevButton.addEventListener('click', function() {
             if (currentMood && currentSongIndex > 0) {
                 currentSongIndex--;
@@ -164,13 +298,20 @@
             }
         });
 
-        // 次の曲ボタンのクリックイベント
         nextButton.addEventListener('click', function() {
             if (currentMood && currentSongIndex < shuffledSongs.length - 1) {
                 currentSongIndex++;
                 updateSong();
             }
         });
+
+        modeToggle.addEventListener('change', function() {
+            isShuffleMode = !this.checked;
+            switchMode(isShuffleMode);
+        });
+
+        // 初期表示
+        switchMode(isShuffleMode);
     </script>
 </body>
 </html>
