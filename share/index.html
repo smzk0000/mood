@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL共有サンプル</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        a.share-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            text-decoration: none;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 5px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <a href="#" class="share-button" id="shareButton">このページを共有</a>
+
+    <script>
+        document.getElementById('shareButton').addEventListener('click', function(e) {
+            e.preventDefault();
+            var shareUrl = encodeURIComponent(window.location.href);
+            var shareTitle = encodeURIComponent(document.title);
+            var shareText = encodeURIComponent('こちらのページをご覧ください：');
+            
+            if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                // モバイルデバイスの場合
+                if (navigator.share) {
+                    navigator.share({
+                        title: document.title,
+                        text: 'こちらのページをご覧ください：',
+                        url: window.location.href
+                    }).catch(function(error) {
+                        window.location.href = 'sms:?body=' + shareText + ' ' + shareUrl;
+                    });
+                } else {
+                    window.location.href = 'sms:?body=' + shareText + ' ' + shareUrl;
+                }
+            } else {
+                // デスクトップの場合
+                window.open('mailto:?subject=' + shareTitle + '&body=' + shareText + ' ' + shareUrl);
+            }
+        });
+    </script>
+</body>
+</html>
